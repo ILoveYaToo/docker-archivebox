@@ -1,5 +1,4 @@
 FROM node:17.9.1-alpine AS nodejs
-#ENV ARCHIVEBOX_TAG="0.6.2"
 ARG ARCHIVEBOX_VER
 ARG GUNICORN_VER
 
@@ -13,9 +12,6 @@ WORKDIR /app
 RUN npm ci --omit=dev
 
 FROM python:3.10-alpine AS python
-
-#ENV GUNICORN_VER="20.1.0"
-#ENV ARCHIVEBOX_TAG="0.6.2"
 ARG GUNICORN_VER
 ARG ARCHIVEBOX_VER
 
