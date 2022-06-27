@@ -42,28 +42,6 @@ jobs:
             fi
           name: "Build Archivebox Image"
     working_directory: ~/app
-  docker-build-git: 
-    machine: 
-      docker_layer_caching: true
-      image: "ubuntu-2004:2022.04.1"
-      resource_class: medium
-    steps: 
-      - 
-        checkout: 
-          path: ~/app
-      - 
-        run: 
-          command: "echo \"$GITHUB_TOKEN\" | docker login --username \"ILoveYaToo\" --password-stdin ghcr.io\n"
-          name: "Github Docker Repo"
-      - 
-        run: 
-          command: |
-            export LATEST_VERSION=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/ArchiveBox/ArchiveBox/releases | jq -r '.[] | select(.prerelease==false) | .tag_name' | sort -V | tail -n1 | cut -d "v" -f 2)
-            export GITHUB_API_TOKEN=$(curl -u ILoveYaToo:$GITHUB_TOKEN https://ghcr.io/token\?scope\="repository:<repository/path>:pull" | jq -r .token)
-            docker build -t ghcr.io/iloveyatoo/archivebox:git --build-arg ARCHIVEBOX_VER=master --build-arg GUNICORN_VER=20.1.0 .
-            docker push ghcr.io/iloveyatoo/archivebox:git
-          name: "Build Archivebox Image"
-    working_directory: ~/app
 version: 2.1
 workflows: 
   octodns: 
@@ -76,13 +54,6 @@ workflows:
             - build-tools-registry
             - github
       - docker-build-stable:
-          filters:
-            branches:
-              only: master
-          context: 
-            - build-tools-registry
-            - github
-      - docker-build-git:
           filters:
             branches:
               only: master
