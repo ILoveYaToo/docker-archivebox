@@ -49,8 +49,10 @@ COPY --from=nodejs /app/node_modules /app/node_modules
 COPY --from=python /app/venv /app/venv
 
 ## Create User
-RUN addgroup -S archivebox \
-    && adduser -S -h /app -g archivebox -G audio -G video archivebox
+RUN addgroup --gid 1000 archivebox \
+    && adduser -S -h /app -u 1000 -G archivebox archivebox \
+    && addgroup archivebox video \
+    && addgroup archivebox audio
 
 ## Create Entrypoint
 COPY files/entrypoint.sh /entrypoint.sh
@@ -58,13 +60,14 @@ RUN chmod +x /entrypoint.sh
 
 ## Create data dir
 RUN mkdir /app/data \
-    && chown -R archivebox:archivebox /app/data
+    && chown -R archivebox:archivebox /app/data \
+    && id archivebox 
 WORKDIR /app/data
 
 # Set user
 USER archivebox
 
 # Set path
-ENV PATH="/app/venv/bin:/app/node_modules/.bin:$PATH" 
+ENV PATH="/app/venv/bin:/app/node_modules/.bin:$PATH"
 
 CMD ["/entrypoint.sh"]
