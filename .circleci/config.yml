@@ -36,7 +36,7 @@ jobs:
             export GITHUB_API_TOKEN=$(curl -u ILoveYaToo:$GITHUB_TOKEN https://ghcr.io/token\?scope\="repository:<repository/path>:pull" | jq -r .token)
             if [ $(curl -s -o /dev/null -w "%{http_code}" -H "Authorization: Bearer $GITHUB_API_TOKEN" https://ghcr.io/v2/iloveyatoo/archivebox/manifests/$LATEST_VERSION) == "404" ]
             then
-              docker build -t ghcr.io/iloveyatoo/archivebox:latest -t ghcr.io/iloveyatoo/archivebox:$LATEST_VERSION --build-arg ARCHIVEBOX_VER=$LATEST_VERSION --build-arg GUNICORN_VER=20.1.0 .
+              docker build -t ghcr.io/iloveyatoo/archivebox:latest -t ghcr.io/iloveyatoo/archivebox:$LATEST_VERSION --build-arg ARCHIVEBOX_VER=v$LATEST_VERSION --build-arg GUNICORN_VER=20.1.0 .
               docker push ghcr.io/iloveyatoo/archivebox:latest
               docker push ghcr.io/iloveyatoo/archivebox:$LATEST_VERSION
             fi

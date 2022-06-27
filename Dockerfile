@@ -6,7 +6,7 @@ RUN apk add --no-cache \
     git \
     openssh-client
 
-RUN git clone -b v$ARCHIVEBOX_VER https://github.com/ArchiveBox/ArchiveBox.git /app \
+RUN git clone -b $ARCHIVEBOX_VER https://github.com/ArchiveBox/ArchiveBox.git /app \
     && rm -rf /app/.git
 WORKDIR /app
 RUN npm ci --omit=dev
