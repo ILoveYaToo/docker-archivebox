@@ -44,14 +44,14 @@ workflows:
       - docker-lint:
           filters:
             branches:
-              ignore: main
+              ignore: master
           context:
             - build-tools-registry
             - github
       - docker-build:
           filters:
             branches:
-              only: main
+              only: master
           context: 
             - build-tools-registry
             - github

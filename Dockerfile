@@ -27,17 +27,17 @@ RUN apk add --no-cache musl-dev gcc \
 COPY files/wsgi.py /app/venv/lib/python3.10/site-packages/archivebox/wsgi.py
 
 FROM python:3.10-alpine
-ENV NODE_DIR="/app/" \
-    IN_DOCKER=True \
-    CHROME_SANDBOX=False \
-    CHROME_BINARY="/usr/bin/chromium-browser" \
-    USE_SINGLEFILE=True \
-    SINGLEFILE_BINARY="$NODE_DIR/node_modules/.bin/single-file" \
-    USE_READABILITY=True \
-    READABILITY_BINARY="$NODE_DIR/node_modules/.bin/readability-extractor" \
-    USE_MERCURY=True \
-    MERCURY_BINARY="$NODE_DIR/node_modules/.bin/mercury-parser" \
-    YOUTUBEDL_BINARY="yt-dlp"
+ENV NODE_DIR="/app/"
+ENV IN_DOCKER=True 
+ENV CHROME_SANDBOX=False 
+ENV CHROME_BINARY="/usr/bin/chromium-browser" 
+ENV USE_SINGLEFILE=True 
+ENV SINGLEFILE_BINARY="$NODE_DIR/node_modules/.bin/single-file" 
+ENV USE_READABILITY=True 
+ENV READABILITY_BINARY="$NODE_DIR/node_modules/.bin/readability-extractor" 
+ENV USE_MERCURY=True
+ENV MERCURY_BINARY="$NODE_DIR/node_modules/.bin/mercury-parser"
+ENV YOUTUBEDL_BINARY="yt-dlp"
 
 RUN apk add --no-cache libstdc++ chromium wget
 
