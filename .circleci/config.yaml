@@ -1,0 +1,57 @@
+--- 
+jobs: 
+  docker-lint: 
+    machine: 
+      docker_layer_caching: true
+      image: "ubuntu-2004:2022.04.1"
+      resource_class: medium
+    steps: 
+      - 
+        checkout: 
+          path: ~/app
+      - run:
+          command: env
+      - 
+        run: 
+          command: "docker run --rm -i hadolint/hadolint < Dockerfile\n"
+          name: "Lint Dockerfile"
+    working_directory: ~/app
+  docker-build: 
+    machine: 
+      docker_layer_caching: true
+      image: "ubuntu-2004:2022.04.1"
+      resource_class: medium
+    steps: 
+      - 
+        checkout: 
+          path: ~/app
+      - 
+        run: 
+          command: "echo \"$GITHUB_TOKEN\" | docker login --username \"ILoveYaToo\" --password-stdin ghcr.io\n"
+          name: "Github Docker Repo"
+      - 
+        run: 
+          command: |
+            export LATEST_VERSION = $(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/ArchiveBox/ArchiveBox/releases | jq -r '.[] | select(.prerelease==false) | .tag_name' | sort -V | tail -n1 | | cut -d "v" -f 2))
+            docker build -t ghcr.io/ILoveYaToo/archivebox:latest --build-arg ARCHIVEBOX_VER=$LATEST_VERSION --build-arg GUNICORN_VER=20.1.0
+            docker push ghcr.io/ILoveYaToo/archivebox:latest
+          name: "Build Archivebox Image"
+    working_directory: ~/app
+version: 2.1
+workflows: 
+  octodns: 
+    jobs: 
+      - docker-lint:
+          filters:
+            branches:
+              ignore: main
+          context:
+            - build-tools-registry
+            - github
+      - docker-build:
+          filters:
+            branches:
+              only: main
+          context: 
+            - build-tools-registry
+            - github
