@@ -59,9 +59,13 @@ COPY files/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 ## Create data dir
-RUN mkdir /app/data \
-    && chown -R archivebox:archivebox /app/data \
-    && id archivebox 
+RUN mkdir -p /app/data /app/static \
+    && chown -R archivebox:archivebox /app/data /app/static \
+    && id archivebox
+
+## Patch settings.py to enable STATIC_ROOT
+RUN echo "STATIC_ROOT = '/app/static'" >> /app/venv/lib/python3.10/site-packages/archivebox/core/settings.py
+
 WORKDIR /app/data
 
 # Set user
