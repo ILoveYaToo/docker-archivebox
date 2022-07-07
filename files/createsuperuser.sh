@@ -1,0 +1,2 @@
+#!/bin/sh
+archivebox manage shell --command="from django.contrib.auth import get_user_model; import os; DJANGO_SUPERUSER_USERNAME = os.getenv('DJANGO_SUPERUSER_USERNAME'); DJANGO_SUPERUSER_EMAIL = os.getenv('DJANGO_SUPERUSER_EMAIL'); DJANGO_SUPERUSER_PASSWORD = os.getenv('DJANGO_SUPERUSER_PASSWORD'); User = get_user_model(); User.objects.filter(username=DJANGO_SUPERUSER_USERNAME).exists() or User.objects.create_superuser(DJANGO_SUPERUSER_USERNAME, DJANGO_SUPERUSER_EMAIL, DJANGO_SUPERUSER_PASSWORD);"
