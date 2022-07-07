@@ -54,10 +54,6 @@ RUN addgroup --gid 1000 archivebox \
     && addgroup archivebox video \
     && addgroup archivebox audio
 
-## Create Entrypoint
-COPY files/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
 ## Create data dir
 RUN mkdir -p /app/data /app/static \
     && chown -R archivebox:archivebox /app/data /app/static \
@@ -65,6 +61,13 @@ RUN mkdir -p /app/data /app/static \
 
 ## Patch settings.py to enable STATIC_ROOT
 RUN echo "STATIC_ROOT = '/app/static'" >> /app/venv/lib/python3.10/site-packages/archivebox/core/settings.py
+
+# Add scripts
+RUN mkdir -p /docker
+ADD files/createsuperuser.sh /docker/createsuperuser.sh
+RUN chmod +x /docker/createsuperuser.sh
+ADD files/gunicorn.sh /docker/gunicorn.sh
+RUN chmod +x /docker/gunicorn.sh
 
 WORKDIR /app/data
 
@@ -74,4 +77,3 @@ USER archivebox
 # Set path
 ENV PATH="/app/venv/bin:/app/node_modules/.bin:$PATH"
 
-CMD ["/entrypoint.sh"]
