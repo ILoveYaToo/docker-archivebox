@@ -39,7 +39,7 @@ ENV USE_MERCURY=True
 ENV MERCURY_BINARY="$NODE_DIR/node_modules/.bin/mercury-parser"
 ENV YOUTUBEDL_BINARY="yt-dlp"
 
-RUN apk add --no-cache libstdc++ chromium wget
+RUN apk add --no-cache libstdc++ chromium wget curl
 
 # Node Requirements
 COPY --from=nodejs /usr/local/bin/node /usr/local/bin/node
