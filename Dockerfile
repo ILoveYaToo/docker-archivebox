@@ -38,8 +38,10 @@ ENV READABILITY_BINARY="$NODE_DIR/node_modules/.bin/readability-extractor"
 ENV USE_MERCURY=True
 ENV MERCURY_BINARY="$NODE_DIR/node_modules/.bin/mercury-parser"
 ENV YOUTUBEDL_BINARY="yt-dlp"
+ENV GIT_BINARY="/usr/bin/git"
+ENV RIPGREP_BINARY="/usr/bin/rg"
 
-RUN apk add --no-cache libstdc++ chromium wget curl
+RUN apk add --no-cache libstdc++ chromium wget curl git ripgrep
 
 # Node Requirements
 COPY --from=nodejs /usr/local/bin/node /usr/local/bin/node
