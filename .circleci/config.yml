@@ -9,8 +9,6 @@ jobs:
       - 
         checkout: 
           path: ~/app
-      - run:
-          command: env
       - 
         run: 
           command: "docker run --rm -i hadolint/hadolint < Dockerfile\n"
